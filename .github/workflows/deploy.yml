@@ -11,6 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: unnecessary
+
+    - name: Add to known hosts
+      run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
+    
     - name: Deploy to the server
       uses: easingthemes/ssh-deploy@main
       env:
